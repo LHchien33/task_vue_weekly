@@ -16,7 +16,11 @@ const app = Vue.createApp({
   data(){
     return {
       userEmail: '',
-      password: ''
+      password: '',
+      invalid: {
+        email: false,
+        password: false
+      }
     }
   },
   methods: {
@@ -26,6 +30,14 @@ const app = Vue.createApp({
         username: this.userEmail,
         password: this.password
       };
+      
+      this.userEmail ? this.invalid.email = false : this.invalid.email = true;
+      this.password ? this.invalid.password = false : this.invalid.password = true;
+      
+      if(this.userEmail === '' || this.password === ''){
+        alert('欄位不得為空');
+        return
+      }
 
       axios.post(url, data)
         .then(res => {
