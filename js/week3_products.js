@@ -45,8 +45,8 @@ const app = Vue.createApp({
       if (id === 'price' || id === 'origin_price'){
         if (typeof(this.tempProduct[id]) === 'undefined'){
           this.invalid[id] = true;
-        } else if (typeof(this.tempProduct[id]) !== 'number'){
-          this.invalid[id] = '非數字';
+        } else if (typeof(this.tempProduct[id]) !== 'number' || this.tempProduct[id] < 0){
+          this.invalid[id] = '非合理數字';
         } else {
           this.invalid[id] = false
         }
@@ -70,16 +70,16 @@ const app = Vue.createApp({
         return
       }
 
-      // 應為數字但不是數字的欄位
-      if (Object.values(this.invalid).includes('非數字')){
-        alert('原價、售價 欄位請輸入數字');
+      // 不是合理數字的欄位
+      if (Object.values(this.invalid).includes('非合理數字')){
+        alert('原價/售價 欄位請輸入 >= 0 的數字');
         return
       }
 
       // 除去空的圖片
       this.tempProduct.imagesUrl = this.tempProduct.imagesUrl.filter(item => item !== '')
 
-      // 請求
+      // 新增/更新產品請求
       const http = this.isNew ? 'post' : 'put';
       const pathEnd = this.isNew ? '' : `/${this.tempProduct.id}`;
       const url = `${api.apiBase}/admin/${api.paths.product}${pathEnd}`;
@@ -87,7 +87,7 @@ const app = Vue.createApp({
       
       axios[http](url, requestData)
       .then(res => {
-        alert(res.data.message)
+        setTimeout(() => alert(res.data.message), 500)
         this.getProducts();
         productModal.hide();
       })
@@ -130,7 +130,7 @@ const app = Vue.createApp({
 
       axios.delete(url)
       .then(res => {
-        alert(res.data.message);
+        setTimeout(() => alert(res.data.message), 500);
         productDelModal.hide();
         this.getProducts();
       })
