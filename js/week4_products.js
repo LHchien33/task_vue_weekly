@@ -31,8 +31,8 @@ const app = Vue.createApp({
         alert(err.response.data.message);
       })
     },
-    getProducts(){
-      const url = `${api.apiBase}/admin/${api.paths.pageProducts}`;
+    getProducts(page = 1){
+      const url = `${api.apiBase}/admin/${api.paths.pageProducts}/?page=${page}`;
       axios(url)
         .then(res => {
           this.products = res.data.products;
