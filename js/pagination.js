@@ -25,6 +25,9 @@ export default {
   `,
   methods: {
     switchPage(page){
+      if(page === this.current_page){
+        return
+      }
       this.$emit('switchPage', page)
     }
   }
