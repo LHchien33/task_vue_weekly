@@ -16,6 +16,10 @@ const productPath = {
 
 productPath.allProducts = `${productPath.pageProducts}/all`;
 
+const cartPath = {
+  cart: 'cart',
+  delWholeCart: 'carts',
+}
 
 // 登入驗證 ${api.auth.base}/${api.auth.xx}
 // 後台請求 ${api.apiBase}/admin/${api.paths.xx}
@@ -28,6 +32,7 @@ export default {
   },
   apiBase: `${domain}/v2/api/${api_path}`,
   paths: {
-    ...productPath
+    ...productPath,
+    ...cartPath
   }
 };
