@@ -87,15 +87,12 @@ const app = Vue.createApp({
       .then(res => {
         this.getCarts();
         this.$refs.prodModal.modalHide();
-        setTimeout(() => {
-          this.initBtnState();
-          alert(`成功${text}購物車`);
-        }, 500);
+        alert(`成功${text}購物車`);
       })
       .catch(err => {
-        this.initBtnState();
         alert(`${err.response.data.message}，錯誤代碼：${err.response.status}`);
       })
+      .finally(() => this.initBtnState())
     },
     delCart(type, id){
       let cartAPI = api.paths.cart;
@@ -111,14 +108,13 @@ const app = Vue.createApp({
       const url = `${api.apiBase}/${cartAPI}/${id}`;
       axios.delete(url)
       .then(res => {
-        this.initBtnState();
         this.getCarts();
         alert('已刪除品項');
       })
       .catch(err => {
-        this.initBtnState();
         alert(`${err.response.data.message}，錯誤代碼：${err.response.status}`);
       })
+      .finally(() => this.initBtnState())
     },
     initBtnState(){
       this.isDisabled = false;
@@ -148,15 +144,13 @@ const app = Vue.createApp({
       axios.post(url, requestData)
       .then(res => {
         this.getCarts();
-        this.initBtnState();
         resetForm();
         alert(`成功建立訂單，訂單編號：${res.data.orderId}`)
       })
       .catch(err => {
-        this.initBtnState();
         alert(`${err.response.data.message}，錯誤代碼：${err.response.status}`);
       })
-      
+      .finally(() => this.initBtnState())
     }
   },
   mounted(){
