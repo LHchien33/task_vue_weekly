@@ -9,7 +9,7 @@ export default defineConfig({
   base: '/task_vue_weekly/week6/dist',
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     }
   }
 })
