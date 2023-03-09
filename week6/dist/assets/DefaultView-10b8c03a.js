@@ -1,0 +1,1 @@
+import{_ as t,r as o,o as s,c,b as a,w as n,a as r,d as _}from"./index-4c51cdca.js";const d={},i={class:"container text-center py-5"},l=r("h2",{class:"h3 mb-3"},"頁面載入錯誤，請確認網址是否正確",-1);function f(h,m){const e=o("RouterLink");return s(),c("div",i,[l,a(e,{to:"/",class:"h5"},{default:n(()=>[_("回首頁")]),_:1})])}const u=t(d,[["render",f]]);export{u as default};

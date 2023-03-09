@@ -1,1 +1,0 @@
-import{_ as t,o as c,c as n,a as e}from"./index-f5d8b808.js";const o={},s={class:"container pt-3"},a=e("main",null,[e("h2",null,"這是 前台首頁")],-1),_=[a];function r(i,d){return c(),n("div",s,_)}const f=t(o,[["render",r]]);export{f as default};

@@ -14,7 +14,7 @@ export default {
     }
   },
   methods: {
-    updateCart(){
+    updateCart(item){
       this.isActive = item.id;
       this.isDisabled = true;
 
@@ -82,7 +82,7 @@ export default {
                   查看更多
                 </RouterLink>
                 <button type="button" class="btn btn-outline-danger"
-                        @click="updateCart()" :disabled="isDisabled">
+                        @click="updateCart(prod)" :disabled="isDisabled">
                   加到購物車
                   <i class="fas fa-spinner fa-pulse" v-if="isActive === prod.id"></i>
                 </button>
