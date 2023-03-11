@@ -4,7 +4,7 @@ import router from './router';
 
 import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate';
 import AllRules from '@vee-validate/rules';
-import { localize } from '@vee-validate/i18n';
+import { localize, setLocale } from '@vee-validate/i18n';
 import zh_TW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 
 import axios from 'axios'
@@ -22,17 +22,12 @@ Object.keys(AllRules).forEach(rule => {
 
 configure({
   generateMessage: localize('zh_TW',{
-    names: {
-      email: "信箱",
-      name: "姓名",
-      address: "地址",
-      tel: "電話",
-    },
     messages: {
       ...zh_TW.messages
     }
   }),
 });
+setLocale('zh_TW');
 
 const app = createApp(App);
 

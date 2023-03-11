@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
+  base: '/task_vue_weekly/week7/dist',
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {

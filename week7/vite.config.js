@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/task_vue_weekly/week7/dist',
+  // base: '/task_vue_weekly/week7/dist',
   plugins: [vue()],
   resolve: {
     alias: {

@@ -2,7 +2,8 @@
 
 <div ref="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <VForm v-slot="{ errors, handleReset }" @submit="onSubmit" @invalid-submit="onInvalidSubmit" class="modal-content border-0">
+    <VForm class="modal-content border-0"
+            v-slot="{ errors, handleReset }" @submit="onSubmit" @invalid-submit="onInvalidSubmit" >
       <div class="modal-header bg-dark">
         <h5 class="modal-title text-light" id="productModalLabel">
           <span v-if="isNew">新增產品</span>
@@ -30,6 +31,7 @@
                   </div>
                 </div>
                 <ErrorMessage name="imageUrl" class="d-block mb-0 text-danger"></ErrorMessage>
+                <!-- 上傳圖片 -->
                 <form>
                   <label for="uploadImageUrl" class="form-label mt-2 mb-1">或上傳圖片</label>
                   <label v-if="!previewImg.url" for="uploadImageUrl" class="form-label mb-1 btn btn-outline-secondary w-100 position-relative">選擇圖片
@@ -115,7 +117,7 @@
                   <label for="origin_price" class="form-label">原價<span class="text-danger ms-1">*</span></label>
                   <div class="position-relative mb-1">
                     <VField type="text" name="origin_price" id="origin_price" class="form-control" placeholder="請輸入原價"
-                            rules="required|min_value:0" v-model.number="tempProduct.origin_price"
+                            rules="required|numeric|min_value:0" v-model.number="tempProduct.origin_price"
                             :class="{'border-danger': errors['origin_price']}"
                     ></VField>
                     <div v-if="errors['origin_price']" class="position-absolute top-50 end-0 translate-middle-y px-3 pb-1">
@@ -128,7 +130,7 @@
                   <label for="price" class="form-label">售價<span class="text-danger ms-1">*</span></label>
                   <div class="position-relative mb-1">
                     <VField type="text" name="price" id="price" class="form-control" placeholder="請輸入售價"
-                            rules="required|min_value:0" v-model.number="tempProduct.price" :class="{'border-danger': errors['price']}"
+                            rules="required|numeric|min_value:0" v-model.number="tempProduct.price" :class="{'border-danger': errors['price']}"
                     ></VField>
                     <div v-if="errors['price']" class="position-absolute top-50 end-0 translate-middle-y px-3 pb-1">
                       <span class="material-icons-outlined text-danger align-middle">error_outline</span>
@@ -185,7 +187,7 @@
 </template>
 
 <script>
-import modalMixin from '../mixins/modalMixin.vue';
+import modalMixin from '@/mixins/modalMixin.vue';
 import { configure } from 'vee-validate';
 import { localize } from '@vee-validate/i18n';
 

@@ -38,14 +38,14 @@
 
     <!-- 新增 / 編輯 / 刪除產品 modal -->
     <ProductModal ref="productModal" :temp="{...tempProduct}" :isNew="isNew" @updateProd="updateProd"></ProductModal>
-    <DelModal ref="delModal" :temp="{...tempProduct}" @delProduct="delProduct"></DelModal>
+    <DelModal ref="delModal" :temp="{...tempProduct}" @delData="delProduct"></DelModal>
   </div>
 </template>
 
 <script>
-import Pagination from '../components/Pagination.vue';
-import ProductModal from '../components/ProductModal.vue';
-import DelModal from '../components/DelModal.vue';
+import Pagination from '@/components/Pagination.vue';
+import ProductModal from '@/components/ProductModal.vue';
+import DelModal from '@/components/DelModal.vue';
 
 export default {
   components: {

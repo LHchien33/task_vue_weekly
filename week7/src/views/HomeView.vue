@@ -2,12 +2,12 @@
   <header>    
     <nav class="navbar navbar-expand-lg bg-light">
       <div class="container">
-        <RouterLink to="/admin/products" class="navbar-brand">前台</RouterLink>
+        <RouterLink to="/admin/products" class="navbar-brand">後台</RouterLink>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
+          <ul class="navbar-nav w-100">
             <li class="nav-item">
               <RouterLink to="/admin/products" class="nav-link active">產品管理</RouterLink>
             </li>
@@ -16,6 +16,9 @@
             </li>
             <li class="nav-item">
               <RouterLink to="" @click="logout" class="nav-link active">登出</RouterLink>
+            </li>
+            <li class="nav-item ms-lg-auto">
+              <a href="https://lhchien33.github.io/task_vue_weekly/week5/index.html" class="nav-link active">購物車</a>
             </li>
           </ul>
         </div>
@@ -28,8 +31,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   data(){
     return{

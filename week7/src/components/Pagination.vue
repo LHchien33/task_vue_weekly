@@ -1,20 +1,4 @@
-<script>
-export default {
-  props: ['has_pre', 'total_pages', 'current_page','has_next'],
-  emits: ['switchPage'],
-  methods: {
-    switchPage(page){
-      if(page === this.current_page){
-        return
-      }
-      this.$emit('switchPage', page)
-    }
-  }
-}
-</script>
-
 <template>
-
   <ul class="pagination">
     <li class="page-item" :class="{ 'disabled': !has_pre }">
       <a class="page-link" href="#" aria-label="Previous" @click.prevent="switchPage(current_page - 1)">
@@ -32,6 +16,19 @@ export default {
       </a>
     </li>
   </ul>
-
-
 </template>
+
+<script>
+export default {
+  props: ['has_pre', 'total_pages', 'current_page','has_next'],
+  emits: ['switchPage'],
+  methods: {
+    switchPage(page){
+      if(page === this.current_page){
+        return
+      }
+      this.$emit('switchPage', page)
+    }
+  }
+}
+</script>

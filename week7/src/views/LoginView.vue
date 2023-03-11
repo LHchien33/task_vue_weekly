@@ -58,7 +58,6 @@ export default {
 
       this.$http.post(url, values)
       .then(res => {
-        loader.hide()
         const { token, expired } = res.data;
         document.cookie = `chienToken = ${token}; expires = ${new Date(expired)};`;
         this.$router.push('/admin/products');
@@ -66,6 +65,7 @@ export default {
       .catch(err => {
         alert(`登入失敗，錯誤代碼：${err.response.status}`);
       })
+      .finally(() => loader.hide())
     }
   }
 }
