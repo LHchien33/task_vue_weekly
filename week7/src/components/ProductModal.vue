@@ -9,14 +9,18 @@
           <span v-else>編輯產品</span>
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-                @click="handleReset()"></button>
+                @click="() => {
+                    handleReset();
+                    previewImg = {};
+                  }"></button>
       </div>
       <div class="modal-body">
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-4">
               <div class="mb-5">
-                <label for="imageUrl" class="form-label">主要圖片<span class="text-danger ms-1">*</span></label>
+                <h3 class="mb-0 fs-5">主要圖片<span class="text-danger ms-1">*</span></h3>
+                <label for="imageUrl" class="form-label mt-2 mb-1">請輸入圖片連結</label>
                 <div class="position-relative mb-1">
                   <VField type="text" name="imageUrl" id="imageUrl" class="form-control" placeholder="請輸入圖片連結"
                           rules="required" v-model="tempProduct.imageUrl" :class="{'border-danger': errors['imageUrl']}"
@@ -27,20 +31,33 @@
                 </div>
                 <ErrorMessage name="imageUrl" class="d-block mb-0 text-danger"></ErrorMessage>
                 <form>
-                  <label for="uploadImageUrl" class="form-label mt-3 mb-1">或上傳圖片</label>
-                  <label for="uploadImageUrl" class="form-label mb-1 btn btn-outline-secondary w-100 position-relative">選擇圖片
+                  <label for="uploadImageUrl" class="form-label mt-2 mb-1">或上傳圖片</label>
+                  <label v-if="!previewImg.url" for="uploadImageUrl" class="form-label mb-1 btn btn-outline-secondary w-100 position-relative">選擇圖片
                     <input type="file" id="uploadImageUrl" class="opacity-0 position-absolute start-0"
                             @change="previewUpload($event)"
                     >
                   </label>
                   <!-- 預覽圖 -->
-                  <img v-if="previewImg.url" :src="previewImg.url" :alt="previewImg.alt" class="d-block mb-1 w-100">
-                  <div :class="{'spinner': isLoading }" >
+                  <div v-if="previewImg.url" class="position-relative">
+                    <img :src="previewImg.url" :alt="previewImg.alt" class="d-block mb-1 w-100">
+                    <span class="position-absolute top-0 badge text-bg-light opacity-50 fs-6 m-1">上傳預覽</span>
+                    <span class="position-absolute top-0 start-100 translate-middle rounded-circle badge text-bg-danger pointer"
+                          @click="clearImg('preview')"
+                    >x</span>
+                  </div>
+                  <div :class="{'spinner': isLoading }" v-if="previewImg.url">
                     <button type="button" class="btn btn-secondary w-100"
                             @click="uploadImg" :disabled="isDisabled">確定上傳</button>
                   </div>
                 </form>
-                <img v-if="tempProduct.imageUrl" :src="tempProduct.imageUrl" alt="圖片" class="w-100">
+                <!-- 主圖 -->
+                <div v-if="tempProduct.imageUrl && !previewImg.url" class="position-relative">
+                    <img :src="tempProduct.imageUrl" alt="主要圖片" class="d-block w-100 my-3">
+                    <span class="position-absolute top-0 badge text-bg-light opacity-50 fs-6 m-1">主要圖片</span>
+                    <span class="position-absolute top-0 start-100 translate-middle rounded-circle badge text-bg-danger pointer"
+                          @click="clearImg('link')"
+                    >x</span>
+                </div>
               </div>
               <div>
                 <h3 class="mb-3">多圖新增</h3>
@@ -155,7 +172,10 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                @click="handleReset()">取消</button>
+                @click="() => {
+                    handleReset();
+                    previewImg = {};
+                  }">取消</button>
         <button type="submit" class="btn btn-primary">確認</button>
       </div>
     </VForm>
@@ -192,13 +212,10 @@ export default {
     return {
       modal: {},
       tempProduct: this.temp,
-      previewImg: {
-        url: '',
-        alt: ''
-      },
+      previewImg: {},
       imgFile: {},
       isLoading: false,
-      isDisabled: false
+      isDisabled: false,
     }
   },
   watch: {
@@ -211,9 +228,16 @@ export default {
       this.$emit('updateProd', this.tempProduct, this.tempProduct.id)
     },
     previewUpload($event){
-      this.file = $event.target.files[0]
+      this.imgFile = $event.target.files[0]
       this.previewImg.url = URL.createObjectURL($event.target.files[0])
       this.previewImg.alt = $event.target.files[0].name;
+    },
+    clearImg(type){
+      if (type === 'preview'){
+        this.previewImg = {}
+      } else if (type === 'link'){
+        this.tempProduct.imageUrl = ''
+      }
     },
     uploadImg(){
       this.isLoading = true;
@@ -228,18 +252,19 @@ export default {
       this.$http.post(url, formData)
       .then(res => {
         this.previewImg = {}
-        tempProduct.imageUrl = res.data.imageUrl;
+        this.tempProduct.imageUrl = res.data.imageUrl;
+        console.log(this.tempProduct.imageUrl);
         alert('成功上傳圖片');
       })
       .catch(err => {
-        alert(`圖片上傳失敗，錯誤代碼：${err.response.status}`)
+        alert(`圖片上傳失敗，錯誤代碼：${err.response.status }`)
       })
       .finally(() => {
         this.isLoading = false;
         this.isDisabled = false;
       })
     }
-  }
+  },
 }
 
 
