@@ -2,7 +2,7 @@
 
 <div ref="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <VForm v-slot="{ errors, handleReset }" @submit="onSubmit" class="modal-content border-0">
+    <VForm v-slot="{ errors, handleReset }" @submit="onSubmit" @invalid-submit="onInvalidSubmit" class="modal-content border-0">
       <div class="modal-header bg-dark">
         <h5 class="modal-title text-light" id="productModalLabel">
           <span v-if="isNew">新增產品</span>
@@ -226,6 +226,17 @@ export default {
   methods: {
     onSubmit(values){
       this.$emit('updateProd', this.tempProduct, this.tempProduct.id)
+    },
+    onInvalidSubmit({values, errors}){
+      const firstError = Object.keys(errors)[0]
+      const targetElement = document.querySelector(`#${firstError}`)
+
+      targetElement.scrollIntoView({
+        block: "center",
+        behavior: "smooth"
+      });
+      
+      setTimeout(() => alert(`${errors[firstError]}`), 500)
     },
     previewUpload($event){
       this.imgFile = $event.target.files[0]
