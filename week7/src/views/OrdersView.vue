@@ -91,9 +91,9 @@ export default {
         this.pagination = res.data.pagination;
       })
       .catch(err => {
-        alert(`取得訂單失敗，錯誤代碼：${err.response.status}`)
+        alert(`取得訂單失敗，錯誤代碼：${err.response.status}`);
       })
-      .finally(() => loader.hide())
+      .finally(() => loader.hide());
     },
     openModal(item) {
       this.tempOrder = { ...item };
@@ -106,7 +106,7 @@ export default {
     updatePaid(item) {      
       const loader = this.$loading.show();
 
-      const { VITE_API, VITE_API_PATH } = import.meta.env
+      const { VITE_API, VITE_API_PATH } = import.meta.env;
       const url = `${VITE_API}/api/${VITE_API_PATH}/admin/order/${item.id}`;
       const requestData = { is_paid: item.is_paid };
 
@@ -114,12 +114,12 @@ export default {
       .then(res => {
         this.getOrders();
         this.$refs.orderModal.hideModal();
-        setTimeout(() => alert('成功更新付款狀態'),500)
+        setTimeout(() => alert('成功更新付款狀態'),500);
       })
       .catch(err => {
-        alert(`更新付款狀態失敗，錯誤代碼：${err.response.status}`)
+        alert(`更新付款狀態失敗，錯誤代碼：${err.response.status}`);
       })
-      .finally(() => loader.hide())
+      .finally(() => loader.hide());
     },
     delOrder(orderId) {
       const loader = this.$loading.show();
@@ -131,12 +131,12 @@ export default {
       .then(res => {
         this.$refs.delModal.hideModal();
         this.getOrders();
-        setTimeout(() => alert('成功刪除訂單'),500)
+        setTimeout(() => alert('成功刪除訂單'),500);
       })
       .catch(err => {
-        alert(`刪除訂單失敗，錯誤代碼：${err.response.status}`)
+        alert(`刪除訂單失敗，錯誤代碼：${err.response.status}`);
       })
-      .finally(() => loader.hide())
+      .finally(() => loader.hide());
     },
   },
   mounted() {

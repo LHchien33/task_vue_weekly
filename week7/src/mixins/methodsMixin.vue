@@ -11,8 +11,9 @@ export default {
         date.getMinutes(),
         date.getSeconds(),
       ];
-      
-      const [y, m, d, hr, min, sec] = dataValues
+
+      const tempArr = dataValues.map(item => item < 10 ? `0${item}` : item);  
+      const [y, m, d, hr, min, sec] = tempArr;
 
       return format === 'whole' ?
                         `${y}/${m}/${d} ${hr}:${min}:${sec}` :

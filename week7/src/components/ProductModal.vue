@@ -1,19 +1,15 @@
 <template>
 
-<div ref="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+<div ref="modal" class="modal fade" data-bs-keyboard="false" tabindex="-1">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <VForm class="modal-content border-0"
-            v-slot="{ errors, handleReset }" @submit="onSubmit" @invalid-submit="onInvalidSubmit" >
+    <VForm ref="mainForm" class="modal-content border-0"
+            v-slot="{ errors }" @submit="onSubmit" @invalid-submit="onInvalidSubmit" >
       <div class="modal-header bg-dark">
         <h5 class="modal-title text-light" id="productModalLabel">
           <span v-if="isNew">新增產品</span>
           <span v-else>編輯產品</span>
         </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-                @click="() => {
-                    handleReset();
-                    previewImg = {};
-                  }"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="container-fluid">
@@ -63,14 +59,18 @@
               </div>
               <div>
                 <h3 class="mb-3">多圖新增</h3>
-                <div v-for="(url, i) in tempProduct.imagesUrl" :key="url">
+                <template v-for="(url, i) in tempProduct.imagesUrl" :key="url">
                   <input type="text" name="imagesUrl" class="form-control mb-2" placeholder="請輸入圖片連結"
                           v-model="tempProduct.imagesUrl[i]">
-                  <img class="mb-2 w-100" v-show="url" :src="url" alt="圖片">
-                  <button type="button" class="btn btn-outline-danger w-100" @click="tempProduct.imagesUrl.splice(i, 1)">刪除圖片</button>
-                  <hr class="my-4">
-                </div>
-                <button type="button" class="btn btn-outline-primary w-100" @click="tempProduct.imagesUrl.push('')">新增更多圖片</button>
+                  <div v-if="url" class="position-relative my-3">
+                    <img class="w-100" :src="url" :alt="`多圖-0${i+1}`">
+                    <span class="position-absolute top-0 start-100 translate-middle rounded-circle badge text-bg-danger pointer"
+                          @click="tempProduct.imagesUrl.splice(i, 1)"
+                    >x</span>
+                  </div>
+                </template>
+                <button type="button" class="btn btn-outline-primary w-100"
+                        @click="tempProduct.imagesUrl.push('')">新增更多圖片</button>
               </div>
             </div>
             <div class="col-md-8">
@@ -173,11 +173,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                @click="() => {
-                    handleReset();
-                    previewImg = {};
-                  }">取消</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
         <button type="submit" class="btn btn-primary">確認</button>
       </div>
     </VForm>
@@ -213,7 +209,7 @@ export default {
   data(){
     return {
       modal: {},
-      tempProduct: this.temp,
+      tempProduct: {},
       previewImg: {},
       imgFile: {},
       isLoading: false,
@@ -222,34 +218,41 @@ export default {
   },
   watch: {
     temp(newVal){
-      this.tempProduct = newVal
+      newVal.imagesUrl ?
+      newVal.imagesUrl = newVal.imagesUrl.filter(url => url !== '') :
+      newVal.imagesUrl = [];
+      
+      this.tempProduct = newVal;
+      this.previewImg = {}
     }
   },
   methods: {
     onSubmit(values){
-      this.$emit('updateProd', this.tempProduct, this.tempProduct.id)
+      this.tempProduct.imagesUrl = this.tempProduct.imagesUrl.filter(url => url !== '');
+      this.$emit('updateProd', this.tempProduct, this.tempProduct.id);
     },
     onInvalidSubmit({values, errors}){
-      const firstError = Object.keys(errors)[0]
-      const targetElement = document.querySelector(`#${firstError}`)
-
+      const firstError = Object.keys(errors)[0];
+      const targetElement = document.querySelector(`#${firstError}`);
       targetElement.scrollIntoView({
         block: "center",
         behavior: "smooth"
-      });
-      
-      setTimeout(() => alert(`${errors[firstError]}`), 500)
+      })
+      setTimeout(() => alert(`${errors[firstError]}`), 500);
     },
-    previewUpload($event){
-      this.imgFile = $event.target.files[0]
-      this.previewImg.url = URL.createObjectURL($event.target.files[0])
-      this.previewImg.alt = $event.target.files[0].name;
+    resetForm(){
+      this.$refs.mainForm.resetForm();
+    },
+    previewUpload(e){
+      this.imgFile = e.target.files[0];
+      this.previewImg.url = URL.createObjectURL(e.target.files[0]);
+      this.previewImg.alt = e.target.files[0].name;
     },
     clearImg(type){
       if (type === 'preview'){
-        this.previewImg = {}
+        this.previewImg = {};
       } else if (type === 'link'){
-        this.tempProduct.imageUrl = ''
+        this.tempProduct.imageUrl = '';
       }
     },
     uploadImg(){
@@ -259,25 +262,24 @@ export default {
       const formData = new FormData();
       formData.append('file-to-upload', this.imgFile);
 
-      const { VITE_API, VITE_API_PATH } = import.meta.env
-      const url = `${VITE_API}/api/${VITE_API_PATH}/admin/upload`
+      const { VITE_API, VITE_API_PATH } = import.meta.env;
+      const url = `${VITE_API}/api/${VITE_API_PATH}/admin/upload`;
       
       this.$http.post(url, formData)
       .then(res => {
-        this.previewImg = {}
+        this.previewImg = {};
         this.tempProduct.imageUrl = res.data.imageUrl;
-        console.log(this.tempProduct.imageUrl);
         alert('成功上傳圖片');
       })
       .catch(err => {
-        alert(`圖片上傳失敗，錯誤代碼：${err.response.status }`)
+        alert(`圖片上傳失敗，錯誤代碼：${err.response.status }`);
       })
       .finally(() => {
         this.isLoading = false;
         this.isDisabled = false;
       })
     }
-  },
+  }
 }
 
 

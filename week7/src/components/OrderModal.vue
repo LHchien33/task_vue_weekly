@@ -55,6 +55,15 @@
                     </td>
                   </tr>
                   <tr>
+                    <th>付款時間</th>
+                    <td>
+                      <span v-if="tempOrder.paid_date">
+                        {{ dateConverter(tempOrder.paid_date, 'whole') }}
+                      </span>
+                      <span v-else>--</span>
+                    </td>
+                  </tr>
+                  <tr>
                     <th>總金額</th>
                     <td>
                       {{ `$${tempOrder.total}` }}

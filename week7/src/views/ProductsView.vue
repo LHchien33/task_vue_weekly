@@ -75,9 +75,9 @@ export default {
       .catch(err => {
         alert(`取得產品失敗，錯誤代碼：${err.response.status}`);
       })
-      .finally(() => loader.hide())
+      .finally(() => loader.hide());
     },
-    openModal(type, item){
+    openModal(type, item = {}){
       this.tempProduct = {...item};
       
       if (type === 'del'){
@@ -85,7 +85,7 @@ export default {
         return
       } else if (type === 'new'){
         this.isNew = true;
-        this.tempProduct = { imagesUrl: [] }
+        this.$refs.productModal.resetForm();
       } else if (type === 'edit'){
         this.isNew = false;
       }
@@ -96,24 +96,24 @@ export default {
       const { VITE_API, VITE_API_PATH } = import.meta.env;
       let url = `${VITE_API}/api/${VITE_API_PATH}/admin/product`;
       let method = 'post';
-      let text = '新增'
+      let text = '新增';
 
       if (this.isNew === false){
         url += `/${prodId}`;
-        method = 'put'
-        text = '編輯'
+        method = 'put';
+        text = '編輯';
       }
 
       this.$http[method](url, {data: {...prodData}})
       .then(res => {
-        setTimeout(() => alert(`${res.data.message}`), 1000)
+        setTimeout(() => alert(`${res.data.message}`), 1000);
         this.$refs.productModal.hideModal();
         this.getProducts();
       })
       .catch(err => {
         alert(`${text}產品失敗，錯誤代碼：${err.response.status}`);
       })
-      .finally(() => loader.hide())
+      .finally(() => loader.hide());
     },
     delProduct(prodId){
       const loader = this.$loading.show();
@@ -122,14 +122,14 @@ export default {
 
       this.$http.delete(url)
       .then(res => {
-        setTimeout(() => alert(`${res.data.message}`), 1000)
+        setTimeout(() => alert(`${res.data.message}`), 1000);
         this.$refs.delModal.hideModal();
         this.getProducts();
       })
       .catch(err => {
         alert(`刪除產品失敗，錯誤代碼：${err.response.status}`);
       })
-      .finally(() => loader.hide())
+      .finally(() => loader.hide());
     }
   },
   mounted(){
